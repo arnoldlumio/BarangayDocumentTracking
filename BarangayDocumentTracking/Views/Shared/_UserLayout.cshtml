@@ -1,0 +1,559 @@
+﻿@using Microsoft.AspNetCore.Http
+
+@{
+    var username = Context.Session.GetString("Username") ?? "Resident";
+    var role = Context.Session.GetString("Role") ?? "Resident";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8" />
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0" />
+
+    <title>
+        @ViewData["Title"] - Barangay Document Tracking
+    </title>
+
+
+    <!-- =========================================
+         BOOTSWATCH FLATLY
+         ========================================= -->
+
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootswatch@5.3.3/dist/flatly/bootstrap.min.css">
+
+
+    <!-- =========================================
+         BOOTSTRAP ICONS
+         ========================================= -->
+
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+
+    <style>
+
+        body {
+            background-color: #f5f7fa;
+            min-height: 100vh;
+        }
+
+
+        /* =========================================
+           NAVBAR
+           ========================================= */
+
+        .user-navbar {
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        }
+
+
+        /* =========================================
+           LOGO
+           ========================================= */
+
+        .navbar-logo {
+            width: 42px;
+            height: 42px;
+            object-fit: contain;
+            margin-right: 10px;
+        }
+
+
+        .brand-title {
+            font-size: 17px;
+            font-weight: 700;
+            line-height: 1.1;
+        }
+
+
+        .brand-subtitle {
+            font-size: 10px;
+            color: #7f8c8d;
+            line-height: 1.1;
+        }
+
+
+        /* =========================================
+           NAVIGATION LINKS
+           ========================================= */
+
+        .navbar-nav .nav-link {
+            font-size: 14px;
+            font-weight: 500;
+            padding: 10px 13px !important;
+            margin: 0 2px;
+            border-radius: 5px;
+            transition: all .2s ease;
+        }
+
+
+        .navbar-nav .nav-link:hover {
+            background-color: rgba(52, 152, 219, 0.10);
+        }
+
+
+        .navbar-nav .nav-link.active {
+            background-color: #3498db;
+            color: #ffffff !important;
+        }
+
+
+        .navbar-nav .nav-link i {
+            margin-right: 5px;
+        }
+
+
+        /* =========================================
+           USER DROPDOWN
+           ========================================= */
+
+        .user-dropdown {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+
+        .user-avatar {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            background-color: #3498db;
+            color: #ffffff;
+        }
+
+
+        .user-name {
+            font-size: 13px;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+
+        .user-role {
+            font-size: 10px;
+            color: #7f8c8d;
+        }
+
+
+        /* =========================================
+           MAIN CONTENT
+           ========================================= */
+
+        .user-content {
+            min-height: calc(100vh - 76px);
+            padding: 30px 0;
+        }
+
+
+        /* =========================================
+           PAGE HEADER
+           ========================================= */
+
+        .page-header {
+            margin-bottom: 25px;
+        }
+
+
+        .page-header h1 {
+            font-size: 25px;
+            font-weight: 700;
+            color: #2c3e50;
+            margin-bottom: 5px;
+        }
+
+
+        .page-header p {
+            color: #7f8c8d;
+            font-size: 14px;
+            margin: 0;
+        }
+
+
+        /* =========================================
+           FOOTER
+           ========================================= */
+
+        .user-footer {
+            background: #ffffff;
+            border-top: 1px solid #e5e7eb;
+            padding: 18px 0;
+            color: #7f8c8d;
+            font-size: 12px;
+        }
+
+
+        /* =========================================
+           MOBILE
+           ========================================= */
+
+        @@media (max-width: 991px) {
+
+            .navbar-nav {
+                padding-top: 10px;
+            }
+
+
+            .navbar-nav .nav-link {
+                margin: 2px 0;
+            }
+
+
+            .user-dropdown {
+                margin-top: 10px;
+                padding: 10px;
+                border-top: 1px solid #e5e7eb;
+            }
+
+        }
+
+
+        @@media (max-width: 576px) {
+
+            .user-content {
+                padding: 20px 15px;
+            }
+
+
+            .brand-title {
+                font-size: 15px;
+            }
+
+
+            .brand-subtitle {
+                font-size: 9px;
+            }
+
+
+            .navbar-logo {
+                width: 38px;
+                height: 38px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <!-- =========================================
+         NAVBAR / MENU HEADER
+         ========================================= -->
+
+    <nav class="navbar navbar-expand-lg bg-white user-navbar sticky-top">
+
+        <div class="container">
+
+
+            <!-- =====================================
+                 BRAND
+                 ===================================== -->
+
+            <a asp-controller="User"
+               asp-action="Index"
+               class="navbar-brand d-flex align-items-center">
+
+                <img src="~/img/barangay_logo.png"
+                     alt="Barangay Logo"
+                     class="navbar-logo" />
+
+                <div>
+
+                    <div class="brand-title">
+                        Barangay Document Tracking
+                    </div>
+
+                    <div class="brand-subtitle">
+                        Resident Portal
+                    </div>
+
+                </div>
+
+            </a>
+
+
+
+            <!-- =====================================
+                 MOBILE TOGGLE
+                 ===================================== -->
+
+            <button class="navbar-toggler"
+                    type="button"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#userNavbar">
+
+                <span class="navbar-toggler-icon"></span>
+
+            </button>
+
+
+
+            <!-- =====================================
+                 MENU
+                 ===================================== -->
+
+            <div class="collapse navbar-collapse"
+                 id="userNavbar">
+
+
+                <!-- LEFT MENU -->
+
+                <ul class="navbar-nav ms-auto align-items-lg-center">
+
+
+                    <!-- HOME -->
+
+                    <li class="nav-item">
+
+                        <a asp-controller="User"
+                           asp-action="Index"
+                           class="nav-link">
+
+                            <i class="bi bi-house"></i>
+
+                            Home
+
+                        </a>
+
+                    </li>
+
+
+                    <!-- DOCUMENTS -->
+
+                    <li class="nav-item">
+
+                        <a asp-controller="DocumentRequest"
+                           asp-action="Index"
+                           class="nav-link">
+
+                            <i class="bi bi-file-earmark-text"></i>
+
+                            Documents
+
+                        </a>
+
+                    </li>
+
+
+                    <!-- ANNOUNCEMENTS -->
+
+                    <li class="nav-item">
+
+                        <a asp-controller="User"
+                           asp-action="Announcements"
+                           class="nav-link">
+
+                            <i class="bi bi-megaphone"></i>
+
+                            Announcements
+
+                        </a>
+
+                    </li>
+
+
+                    <!-- TRACK REQUEST -->
+
+                    <li class="nav-item">
+
+                        <a asp-controller="TrackUser"
+                           asp-action="Index"
+                           class="nav-link">
+
+                            <i class="bi bi-search"></i>
+
+                            Track Request
+
+                        </a>
+
+                    </li>
+
+
+                    <!-- =================================
+                         USER MENU
+                         ================================= -->
+
+                    <li class="nav-item dropdown ms-lg-2">
+
+
+                        <a class="nav-link dropdown-toggle user-dropdown"
+                           href="#"
+                           role="button"
+                           data-bs-toggle="dropdown"
+                           aria-expanded="false">
+
+
+                            <span class="user-avatar">
+
+                                <i class="bi bi-person"></i>
+
+                            </span>
+
+
+                            <span>
+
+                                <span class="user-name d-block">
+
+                                    @username
+
+                                </span>
+
+                                <span class="user-role d-block">
+
+                                    @role
+
+                                </span>
+
+                            </span>
+
+
+                        </a>
+
+
+
+                        <ul class="dropdown-menu dropdown-menu-end">
+
+
+                            <li>
+
+                                <h6 class="dropdown-header">
+
+                                    My Account
+
+                                </h6>
+
+                            </li>
+
+
+                            <li>
+
+                                <a class="dropdown-item"
+                                   asp-controller="User"
+                                   asp-action="Index">
+
+                                    <i class="bi bi-house me-2"></i>
+
+                                    Dashboard
+
+                                </a>
+
+                            </li>
+
+
+                            <li>
+
+                                <hr class="dropdown-divider" />
+
+                            </li>
+
+
+                            <li>
+
+                                <a class="dropdown-item text-danger"
+                                   asp-controller="Account"
+                                   asp-action="Logout">
+
+                                    <i class="bi bi-box-arrow-right me-2"></i>
+
+                                    Logout
+
+                                </a>
+
+                            </li>
+
+                        </ul>
+
+                    </li>
+
+                </ul>
+
+            </div>
+
+        </div>
+
+    </nav>
+
+
+
+    <!-- =========================================
+         MAIN CONTENT
+         ========================================= -->
+
+    <main class="user-content">
+
+        <div class="container">
+
+
+            @RenderBody()
+
+
+        </div>
+
+    </main>
+
+
+
+    <!-- =========================================
+         FOOTER
+         ========================================= -->
+
+    <footer class="user-footer">
+
+        <div class="container">
+
+            <div class="d-flex
+                        justify-content-between
+                        align-items-center
+                        flex-wrap
+                        gap-2">
+
+                <div>
+
+                    © @DateTime.Now.Year
+                    Barangay Document Tracking System
+
+                </div>
+
+
+                <div>
+
+                    Resident Portal
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </footer>
+
+
+
+    <!-- =========================================
+         BOOTSTRAP JAVASCRIPT
+         ========================================= -->
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js">
+    </script>
+
+
+    @await RenderSectionAsync("Scripts", required: false)
+
+</body>
+
+</html>

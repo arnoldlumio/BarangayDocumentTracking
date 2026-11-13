@@ -1,0 +1,380 @@
+﻿@{
+    ViewData["Title"] = "Notifications";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="mb-4">
+    <h4 class="fw-semibold mb-1">Notifications</h4>
+    <p class="text-muted mb-0">
+        View the latest notifications and document updates.
+    </p>
+</div>
+
+
+<!-- NOTIFICATION CARD -->
+<div class="notification-page-card">
+
+    <!-- HEADER -->
+    <div class="notification-page-header">
+
+        <div>
+            <h5 class="notification-page-title">
+                <i class="bi bi-bell me-2"></i>
+                All Notifications
+            </h5>
+
+            <p class="notification-page-subtitle">
+                Recent system activities and document updates
+            </p>
+        </div>
+
+        <span class="notification-count">
+            4 New
+        </span>
+
+    </div>
+
+
+    <!-- NOTIFICATIONS -->
+    <div class="notification-list">
+
+
+        <!-- NOTIFICATION 1 -->
+        <div class="notification-item unread">
+
+            <div class="notification-icon notification-blue">
+                <i class="bi bi-file-earmark-text"></i>
+            </div>
+
+            <div class="notification-content">
+
+                <h6>
+                    New Document Received
+                </h6>
+
+                <p>
+                    A new document <strong>DOC-006</strong> has been received
+                    and is waiting for processing.
+                </p>
+
+                <small>
+                    <i class="bi bi-clock me-1"></i>
+                    10 minutes ago
+                </small>
+
+            </div>
+
+            <span class="notification-status-dot"></span>
+
+        </div>
+
+
+        <!-- NOTIFICATION 2 -->
+        <div class="notification-item unread">
+
+            <div class="notification-icon notification-orange">
+                <i class="bi bi-hourglass-split"></i>
+            </div>
+
+            <div class="notification-content">
+
+                <h6>
+                    Document Processing
+                </h6>
+
+                <p>
+                    Document <strong>DOC-002</strong> is currently being
+                    processed by the Records Office.
+                </p>
+
+                <small>
+                    <i class="bi bi-clock me-1"></i>
+                    25 minutes ago
+                </small>
+
+            </div>
+
+            <span class="notification-status-dot"></span>
+
+        </div>
+
+
+        <!-- NOTIFICATION 3 -->
+        <div class="notification-item">
+
+            <div class="notification-icon notification-green">
+                <i class="bi bi-check-circle"></i>
+            </div>
+
+            <div class="notification-content">
+
+                <h6>
+                    Document Completed
+                </h6>
+
+                <p>
+                    Document <strong>DOC-004</strong> has been completed
+                    successfully.
+                </p>
+
+                <small>
+                    <i class="bi bi-clock me-1"></i>
+                    1 hour ago
+                </small>
+
+            </div>
+
+        </div>
+
+
+        <!-- NOTIFICATION 4 -->
+        <div class="notification-item">
+
+            <div class="notification-icon notification-purple">
+                <i class="bi bi-arrow-up-right-square"></i>
+            </div>
+
+            <div class="notification-content">
+
+                <h6>
+                    Document Released
+                </h6>
+
+                <p>
+                    Document <strong>DOC-005</strong> has been released
+                    to the recipient.
+                </p>
+
+                <small>
+                    <i class="bi bi-clock me-1"></i>
+                    2 hours ago
+                </small>
+
+            </div>
+
+        </div>
+
+
+    </div>
+
+</div>
+
+
+<style>
+
+    /* ==========================================
+       NOTIFICATION PAGE
+       ========================================== */
+
+    .notification-page-card {
+        background: #ffffff;
+        border: 1px solid #e5e9ed;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+        overflow: hidden;
+    }
+
+
+    .notification-page-header {
+        padding: 20px;
+        border-bottom: 1px solid #e5e9ed;
+
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+
+    .notification-page-title {
+        margin: 0;
+        color: #2c3e50;
+        font-size: 16px;
+        font-weight: 600;
+    }
+
+
+    .notification-page-subtitle {
+        margin: 5px 0 0;
+        color: #7f8c8d;
+        font-size: 13px;
+    }
+
+
+    .notification-count {
+        background: #3498db;
+        color: #ffffff;
+
+        padding: 6px 12px;
+        border-radius: 20px;
+
+        font-size: 12px;
+        font-weight: 600;
+    }
+
+
+    /* ==========================================
+       NOTIFICATION LIST
+       ========================================== */
+
+    .notification-list {
+        display: flex;
+        flex-direction: column;
+    }
+
+
+    .notification-item {
+        position: relative;
+
+        display: flex;
+        align-items: flex-start;
+
+        padding: 20px;
+
+        border-bottom: 1px solid #edf0f2;
+
+        transition: background 0.2s ease;
+    }
+
+
+    .notification-item:last-child {
+        border-bottom: none;
+    }
+
+
+    .notification-item:hover {
+        background: #f8fafc;
+    }
+
+
+    .notification-item.unread {
+        background: #f7fbff;
+    }
+
+
+    /* ==========================================
+       ICON
+       ========================================== */
+
+    .notification-icon {
+        width: 45px;
+        height: 45px;
+
+        border-radius: 8px;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        font-size: 19px;
+
+        margin-right: 15px;
+
+        flex-shrink: 0;
+    }
+
+
+    .notification-blue {
+        background: #eaf4fb;
+        color: #3498db;
+    }
+
+
+    .notification-orange {
+        background: #fff4e6;
+        color: #f39c12;
+    }
+
+
+    .notification-green {
+        background: #eaf7f0;
+        color: #27ae60;
+    }
+
+
+    .notification-purple {
+        background: #f2edfa;
+        color: #6f42c1;
+    }
+
+
+    /* ==========================================
+       CONTENT
+       ========================================== */
+
+    .notification-content {
+        flex: 1;
+    }
+
+
+    .notification-content h6 {
+        margin: 0 0 5px;
+
+        color: #2c3e50;
+
+        font-size: 14px;
+        font-weight: 600;
+    }
+
+
+    .notification-content p {
+        margin: 0 0 7px;
+
+        color: #52616b;
+
+        font-size: 13px;
+
+        line-height: 1.5;
+    }
+
+
+    .notification-content small {
+        color: #95a5a6;
+
+        font-size: 11px;
+    }
+
+
+    /* ==========================================
+       UNREAD DOT
+       ========================================== */
+
+    .notification-status-dot {
+        width: 8px;
+        height: 8px;
+
+        background: #3498db;
+
+        border-radius: 50%;
+
+        margin-top: 6px;
+        margin-left: 10px;
+    }
+
+
+    /* ==========================================
+       MOBILE
+       ========================================== */
+
+    @@media (max-width: 576px) {
+
+        .notification-page-header {
+            align-items: flex-start;
+            gap: 10px;
+        }
+
+
+        .notification-item {
+            padding: 15px;
+        }
+
+
+        .notification-icon {
+            width: 40px;
+            height: 40px;
+            font-size: 17px;
+            margin-right: 12px;
+        }
+
+    }
+
+</style>

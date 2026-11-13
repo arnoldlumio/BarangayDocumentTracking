@@ -1,0 +1,111 @@
+﻿@model List<BarangayDocumentTracking.Models.Document>
+
+@{
+    ViewData["Title"] = "Request Documents";
+   
+}
+
+<div class="container py-5">
+
+    <div class="text-center mb-5">
+        <h2 class="fw-bold">
+            <i class="bi bi-file-earmark-text"></i>
+            Request Documents
+        </h2>
+
+        <p class="text-muted">
+            Select a document that you would like to request.
+        </p>
+    </div>
+
+    <div class="row g-4">
+
+        @if (Model != null && Model.Any())
+        {
+            foreach (var document in Model)
+            {
+                <div class="col-md-6 col-lg-4">
+
+                    <div class="card h-100 shadow-sm">
+
+                        <div class="card-body">
+
+                            <div class="mb-3">
+                                <span class="badge bg-primary">
+                                    @document.DocumentCode
+                                </span>
+                            </div>
+
+                            <h4 class="fw-bold">
+                                @document.DocumentName
+                            </h4>
+
+                            <p class="text-muted">
+                                @document.Description
+                            </p>
+
+                            <hr />
+
+                            <p>
+                                <strong>Requirements:</strong><br />
+                                @document.Requirements
+                            </p>
+
+                            <p>
+                                <strong>Processing Time:</strong><br />
+                                @document.ProcessingTime
+                            </p>
+
+                            <p>
+                                <strong>Fee:</strong><br />
+
+                                @if (document.Fee == 0)
+                                {
+                                    <span class="text-success fw-bold">
+                                        FREE
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="fw-bold">
+                                        ₱@document.Fee.ToString("N2")
+                                    </span>
+                                }
+                            </p>
+
+                        </div>
+
+                        <div class="card-footer bg-white border-0 p-3">
+
+                            <a href="#"
+                               class="btn btn-success w-100">
+                                <i class="bi bi-file-earmark-plus"></i>
+                                Request This Document
+                            </a>
+
+                        </div>
+
+                    </div>
+
+                </div>
+            }
+        }
+        else
+        {
+            <div class="col-12">
+
+                <div class="alert alert-info text-center">
+
+                    <i class="bi bi-info-circle"></i>
+
+                    No documents are currently available
+                    for request.
+
+                </div>
+
+            </div>
+        }
+
+    </div>
+
+</div>

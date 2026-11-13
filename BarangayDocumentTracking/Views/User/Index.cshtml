@@ -1,0 +1,1184 @@
+﻿@using BarangayDocumentTracking.Models
+
+@{
+    ViewData["Title"] = "Resident Dashboard";
+
+    var documents =
+        ViewBag.Documents as List<Document>;
+
+    var announcements =
+        ViewBag.Announcements as List<Announcement>;
+
+    Layout = "~/Views/Shared/_UserLayout.cshtml";
+}
+
+
+<style>
+
+    /* =========================================
+       DASHBOARD
+       ========================================= */
+
+    .dashboard-wrapper {
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+
+
+    /* =========================================
+       STATIC CAROUSEL
+       ========================================= */
+
+    .resident-carousel {
+        border-radius: 10px;
+        overflow: hidden;
+        margin-bottom: 30px;
+
+        box-shadow:
+            0 5px 18px rgba(0, 0, 0, 0.10);
+    }
+
+
+    .resident-carousel .carousel-item {
+        height: 320px;
+        position: relative;
+    }
+
+
+    .carousel-image {
+        width: 100%;
+        height: 320px;
+
+        object-fit: cover;
+    }
+
+
+    /* Dark overlay */
+
+    .carousel-overlay {
+        position: absolute;
+
+        top: 0;
+        left: 0;
+
+        width: 100%;
+        height: 100%;
+
+        background:
+            linear-gradient(
+                90deg,
+                rgba(20, 35, 50, 0.80),
+                rgba(20, 35, 50, 0.30)
+            );
+
+        display: flex;
+        align-items: center;
+    }
+
+
+    .carousel-caption-custom {
+        width: 100%;
+        max-width: 1200px;
+
+        margin: 0 auto;
+
+        padding: 30px 60px;
+
+        text-align: left;
+    }
+
+
+    .carousel-caption-custom h2 {
+        color: #ffffff;
+
+        font-size: 30px;
+
+        font-weight: 700;
+
+        margin-bottom: 10px;
+    }
+
+
+    .carousel-caption-custom p {
+        color: #ffffff;
+
+        font-size: 15px;
+
+        max-width: 600px;
+
+        line-height: 1.6;
+
+        margin-bottom: 20px;
+    }
+
+
+    .carousel-caption-custom .btn {
+        font-size: 13px;
+        font-weight: 600;
+        padding: 10px 18px;
+    }
+
+
+    /* Carousel indicators */
+
+    .resident-carousel .carousel-indicators {
+        margin-bottom: 15px;
+    }
+
+
+    .resident-carousel .carousel-indicators button {
+        width: 9px;
+        height: 9px;
+
+        border-radius: 50%;
+
+        margin: 0 4px;
+    }
+
+
+    /* Carousel controls */
+
+    .resident-carousel .carousel-control-prev,
+    .resident-carousel .carousel-control-next {
+        width: 55px;
+    }
+
+
+    /* =========================================
+       WELCOME BANNER
+       ========================================= */
+
+    .welcome-card {
+
+        background: #ffffff;
+
+        border: 1px solid #e5e7eb;
+
+        border-radius: 8px;
+
+        box-shadow:
+            0 3px 12px rgba(0, 0, 0, 0.05);
+    }
+
+
+    .welcome-card .card-body {
+        padding: 25px;
+    }
+
+
+    .welcome-title {
+
+        color: #2c3e50;
+
+        font-size: 23px;
+
+        font-weight: 700;
+
+        margin-bottom: 6px;
+    }
+
+
+    .welcome-text {
+
+        color: #7f8c8d;
+
+        font-size: 14px;
+
+        margin: 0;
+
+        line-height: 1.6;
+    }
+
+
+    .welcome-icon {
+
+        width: 65px;
+        height: 65px;
+
+        display: flex;
+
+        align-items: center;
+
+        justify-content: center;
+
+        background: #eaf4fb;
+
+        color: #3498db;
+
+        border-radius: 50%;
+
+        font-size: 28px;
+    }
+
+
+    /* =========================================
+       SECTION HEADER
+       ========================================= */
+
+    .section-title {
+
+        color: #2c3e50;
+
+        font-size: 19px;
+
+        font-weight: 700;
+
+        margin: 0;
+    }
+
+
+    .section-subtitle {
+
+        color: #7f8c8d;
+
+        font-size: 13px;
+
+        margin: 3px 0 0;
+    }
+
+
+    /* =========================================
+       DOCUMENT CARD
+       ========================================= */
+
+    .document-card {
+
+        height: 100%;
+
+        background: #ffffff;
+
+        border: 1px solid #e5e7eb;
+
+        border-radius: 8px;
+
+        overflow: hidden;
+
+        transition: all .2s ease;
+    }
+
+
+    .document-card:hover {
+
+        transform: translateY(-3px);
+
+        border-color: #3498db;
+
+        box-shadow:
+            0 8px 20px rgba(0, 0, 0, 0.08);
+    }
+
+
+    .document-card .card-body {
+        padding: 22px;
+    }
+
+
+    .document-code {
+
+        display: inline-block;
+
+        padding: 5px 9px;
+
+        background: #eaf4fb;
+
+        color: #3498db;
+
+        border-radius: 4px;
+
+        font-size: 11px;
+
+        font-weight: 700;
+
+        margin-bottom: 12px;
+    }
+
+
+    .document-name {
+
+        color: #2c3e50;
+
+        font-size: 17px;
+
+        font-weight: 700;
+
+        margin-bottom: 8px;
+    }
+
+
+    .document-description {
+
+        color: #7f8c8d;
+
+        font-size: 13px;
+
+        line-height: 1.6;
+
+        min-height: 62px;
+
+        margin-bottom: 15px;
+    }
+
+
+    .document-info {
+
+        border-top: 1px solid #eeeeee;
+
+        padding-top: 14px;
+    }
+
+
+    .document-info-row {
+
+        display: flex;
+
+        justify-content: space-between;
+
+        align-items: center;
+
+        margin-bottom: 8px;
+
+        font-size: 12px;
+    }
+
+
+    .document-info-label {
+
+        color: #7f8c8d;
+    }
+
+
+    .document-info-value {
+
+        color: #2c3e50;
+
+        font-weight: 600;
+
+        text-align: right;
+    }
+
+
+    .free-label {
+
+        color: #18bc9c;
+
+        font-weight: 700;
+    }
+
+
+    /* =========================================
+       ANNOUNCEMENT CARD
+       ========================================= */
+
+    .announcement-card {
+
+        background: #ffffff;
+
+        border: 1px solid #e5e7eb;
+
+        border-radius: 8px;
+
+        margin-bottom: 12px;
+
+        transition: all .2s ease;
+    }
+
+
+    .announcement-card:hover {
+
+        border-color: #3498db;
+
+        box-shadow:
+            0 5px 15px rgba(0, 0, 0, 0.06);
+    }
+
+
+    .announcement-card .card-body {
+        padding: 20px;
+    }
+
+
+    .announcement-icon {
+
+        width: 42px;
+        height: 42px;
+
+        flex-shrink: 0;
+
+        display: flex;
+
+        align-items: center;
+
+        justify-content: center;
+
+        background: #eaf4fb;
+
+        color: #3498db;
+
+        border-radius: 6px;
+
+        font-size: 19px;
+    }
+
+
+    .announcement-title {
+
+        color: #2c3e50;
+
+        font-size: 15px;
+
+        font-weight: 700;
+
+        margin-bottom: 4px;
+    }
+
+
+    .announcement-date {
+
+        color: #95a5a6;
+
+        font-size: 11px;
+    }
+
+
+    .announcement-content {
+
+        color: #7f8c8d;
+
+        font-size: 13px;
+
+        line-height: 1.6;
+
+        margin-top: 10px;
+
+        margin-bottom: 0;
+    }
+
+
+    /* =========================================
+       EMPTY STATE
+       ========================================= */
+
+    .empty-state {
+
+        padding: 35px 20px;
+
+        text-align: center;
+
+        border: 1px dashed #dfe4e8;
+
+        border-radius: 8px;
+
+        background: #ffffff;
+    }
+
+
+    .empty-state i {
+
+        font-size: 35px;
+
+        color: #95a5a6;
+
+        margin-bottom: 10px;
+    }
+
+
+    .empty-state h6 {
+
+        color: #34495e;
+
+        font-weight: 600;
+
+        margin-bottom: 5px;
+    }
+
+
+    .empty-state p {
+
+        color: #95a5a6;
+
+        font-size: 13px;
+
+        margin: 0;
+    }
+
+
+    /* =========================================
+       MOBILE
+       ========================================= */
+
+    @@media (max-width: 768px) {
+
+        .resident-carousel .carousel-item {
+            height: 280px;
+        }
+
+
+        .carousel-image {
+            height: 280px;
+        }
+
+
+        .carousel-caption-custom {
+            padding: 25px 35px;
+        }
+
+
+        .carousel-caption-custom h2 {
+            font-size: 22px;
+        }
+
+
+        .carousel-caption-custom p {
+            font-size: 13px;
+        }
+
+
+        .welcome-card .card-body {
+            padding: 20px;
+        }
+
+
+        .welcome-title {
+            font-size: 20px;
+        }
+
+
+        .document-description {
+            min-height: auto;
+        }
+
+    }
+
+
+    @@media (max-width: 500px) {
+
+        .resident-carousel .carousel-item {
+            height: 250px;
+        }
+
+
+        .carousel-image {
+            height: 250px;
+        }
+
+
+        .carousel-caption-custom {
+            padding: 20px 25px;
+        }
+
+
+        .carousel-caption-custom h2 {
+            font-size: 19px;
+        }
+
+
+        .carousel-caption-custom p {
+            font-size: 12px;
+
+            margin-bottom: 12px;
+        }
+
+
+        .carousel-caption-custom .btn {
+            font-size: 11px;
+
+            padding: 8px 12px;
+        }
+
+
+        .resident-carousel .carousel-control-prev,
+        .resident-carousel .carousel-control-next {
+            width: 40px;
+        }
+
+    }
+
+</style>
+
+
+
+<div class="dashboard-wrapper">
+
+
+    <!-- =========================================
+         STATIC CAROUSEL
+         ========================================= -->
+
+    <div id="residentCarousel"
+         class="carousel slide resident-carousel"
+         data-bs-ride="carousel"
+         data-bs-interval="5000">
+
+
+        <!-- INDICATORS -->
+
+        <div class="carousel-indicators">
+
+            <button type="button"
+                    data-bs-target="#residentCarousel"
+                    data-bs-slide-to="0"
+                    class="active"
+                    aria-current="true"
+                    aria-label="Slide 1">
+            </button>
+
+
+            <button type="button"
+                    data-bs-target="#residentCarousel"
+                    data-bs-slide-to="1"
+                    aria-label="Slide 2">
+            </button>
+
+
+            <button type="button"
+                    data-bs-target="#residentCarousel"
+                    data-bs-slide-to="2"
+                    aria-label="Slide 3">
+            </button>
+
+        </div>
+
+
+
+        <!-- =====================================
+             SLIDE 1
+             ===================================== -->
+
+        <div class="carousel-inner">
+
+
+            <div class="carousel-item active">
+
+                <img src="~/img/image1.png"
+                     class="carousel-image"
+                     alt="Barangay Community">
+
+
+                <div class="carousel-overlay">
+
+                    <div class="carousel-caption-custom">
+
+                        <h2>
+                            Welcome to Our Barangay
+                        </h2>
+
+                        <p>
+                            Access barangay services,
+                            request documents, and stay
+                            informed about community
+                            activities.
+                        </p>
+
+                        <a asp-controller="DocumentRequest"
+                           asp-action="Index"
+                           class="btn btn-primary">
+
+                            <i class="bi bi-file-earmark-plus me-1"></i>
+
+                            Request Documents
+
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- =====================================
+                 SLIDE 2
+                 ===================================== -->
+
+            <div class="carousel-item">
+
+                <img src="https://roxascity.gov.ph/wp-content/uploads/2025/02/Consultation-Dialogue-with-the-Officials-and-Residents-of-Barangay-1Consultation-Dialogue-with-the-Officials-and-Residents-of-Barangay-1-edited.jpg"
+                     class="carousel-image"
+                     alt="Barangay Services">
+
+
+                <div class="carousel-overlay">
+
+                    <div class="carousel-caption-custom">
+
+                        <h2>
+                            Barangay Services
+                        </h2>
+
+                        <p>
+                            Easily view available
+                            documents and check their
+                            processing requirements
+                            and fees.
+                        </p>
+
+                        <a asp-controller="DocumentRequest"
+                           asp-action="Index"
+                           class="btn btn-success">
+
+                            <i class="bi bi-file-earmark-text me-1"></i>
+
+                            View Documents
+
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- =====================================
+                 SLIDE 3
+                 ===================================== -->
+
+            <div class="carousel-item">
+
+                <img src="~/img/image3.jpg"
+                     class="carousel-image"
+                     alt="Barangay Announcement">
+
+
+                <div class="carousel-overlay">
+
+                    <div class="carousel-caption-custom">
+
+                        <h2>
+                            Stay Updated
+                        </h2>
+
+                        <p>
+                            Keep up with the latest
+                            barangay announcements,
+                            events, and important
+                            community information.
+                        </p>
+
+                        <a asp-controller="User"
+                           asp-action="Announcements"
+                           class="btn btn-info">
+
+                            <i class="bi bi-megaphone me-1"></i>
+
+                            View Announcements
+
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+        </div>
+
+
+
+        <!-- PREVIOUS -->
+
+        <button class="carousel-control-prev"
+                type="button"
+                data-bs-target="#residentCarousel"
+                data-bs-slide="prev">
+
+            <span class="carousel-control-prev-icon"
+                  aria-hidden="true">
+            </span>
+
+            <span class="visually-hidden">
+                Previous
+            </span>
+
+        </button>
+
+
+
+        <!-- NEXT -->
+
+        <button class="carousel-control-next"
+                type="button"
+                data-bs-target="#residentCarousel"
+                data-bs-slide="next">
+
+            <span class="carousel-control-next-icon"
+                  aria-hidden="true">
+            </span>
+
+            <span class="visually-hidden">
+                Next
+            </span>
+
+        </button>
+
+    </div>
+
+
+
+    <!-- =========================================
+         WELCOME
+         ========================================= -->
+
+    <div class="card welcome-card mb-4">
+
+        <div class="card-body">
+
+            <div class="row align-items-center">
+
+                <div class="col">
+
+                    <div class="welcome-title">
+
+                        Welcome to the Resident Portal
+
+                    </div>
+
+                    <p class="welcome-text">
+
+                        Request barangay documents,
+                        track your requests, and stay
+                        updated with the latest
+                        barangay announcements.
+
+                    </p>
+
+                </div>
+
+
+                <div class="col-auto d-none d-sm-block">
+
+                    <div class="welcome-icon">
+
+                        <i class="bi bi-person-check"></i>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =========================================
+         DOCUMENTS HEADER
+         ========================================= -->
+
+    <div class="d-flex
+                justify-content-between
+                align-items-center
+                mb-3">
+
+        <div>
+
+            <h5 class="section-title">
+
+                <i class="bi bi-file-earmark-text me-1"></i>
+
+                Available Documents
+
+            </h5>
+
+            <p class="section-subtitle">
+
+                Documents available for request
+
+            </p>
+
+        </div>
+
+
+        <a asp-controller="DocumentRequest"
+           asp-action="Index"
+           class="btn btn-primary">
+
+            <i class="bi bi-file-earmark-plus me-1"></i>
+
+            <span class="d-none d-sm-inline">
+                Request Documents
+            </span>
+
+            <span class="d-inline d-sm-none">
+                Request
+            </span>
+
+        </a>
+
+    </div>
+
+
+
+    <!-- =========================================
+         DOCUMENTS
+         ========================================= -->
+
+    <div class="row g-3 mb-5">
+
+        @if (documents != null && documents.Any())
+        {
+            foreach (var document in documents.Take(3))
+            {
+                <div class="col-md-6 col-lg-4">
+
+                    <div class="document-card">
+
+                        <div class="card-body">
+
+
+                            <div class="document-code">
+
+                                @document.DocumentCode
+
+                            </div>
+
+
+                            <div class="document-name">
+
+                                @document.DocumentName
+
+                            </div>
+
+
+                            <p class="document-description">
+
+                                @document.Description
+
+                            </p>
+
+
+                            <div class="document-info">
+
+
+                                <div class="document-info-row">
+
+                                    <span class="document-info-label">
+
+                                        <i class="bi bi-clock me-1"></i>
+
+                                        Processing
+
+                                    </span>
+
+
+                                    <span class="document-info-value">
+
+                                        @document.ProcessingTime
+
+                                    </span>
+
+                                </div>
+
+
+                                <div class="document-info-row mb-0">
+
+                                    <span class="document-info-label">
+
+                                        <i class="bi bi-cash-coin me-1"></i>
+
+                                        Fee
+
+                                    </span>
+
+
+                                    <span class="document-info-value">
+
+                                        @if (document.Fee == 0)
+                                        {
+                                            <span class="free-label">
+                                                FREE
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            <span>
+                                                ₱@document.Fee.ToString("N2")
+                                            </span>
+                                        }
+
+                                    </span>
+
+                                </div>
+
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+            }
+        }
+        else
+        {
+            <div class="col-12">
+
+                <div class="empty-state">
+
+                    <i class="bi bi-file-earmark-x d-block"></i>
+
+                    <h6>
+                        No Documents Available
+                    </h6>
+
+                    <p>
+                        There are currently no documents
+                        available for request.
+                    </p>
+
+                </div>
+
+            </div>
+        }
+
+    </div>
+
+
+
+    <!-- =========================================
+         ANNOUNCEMENTS HEADER
+         ========================================= -->
+
+    <div class="d-flex
+                justify-content-between
+                align-items-center
+                mb-3">
+
+        <div>
+
+            <h5 class="section-title">
+
+                <i class="bi bi-megaphone me-1"></i>
+
+                Latest Announcements
+
+            </h5>
+
+            <p class="section-subtitle">
+
+                Stay updated with barangay information
+
+            </p>
+
+        </div>
+
+
+        <a asp-controller="User"
+           asp-action="Announcements"
+           class="btn btn-outline-primary">
+
+            <i class="bi bi-arrow-right me-1"></i>
+
+            View All
+
+        </a>
+
+    </div>
+
+
+
+    <!-- =========================================
+         ANNOUNCEMENTS
+         ========================================= -->
+
+    <div class="mb-4">
+
+        @if (announcements != null && announcements.Any())
+        {
+            foreach (var announcement in announcements.Take(3))
+            {
+                <div class="announcement-card">
+
+                    <div class="card-body">
+
+                        <div class="d-flex
+                                    align-items-start
+                                    gap-3">
+
+
+                            <div class="announcement-icon">
+
+                                <i class="bi bi-megaphone"></i>
+
+                            </div>
+
+
+                            <div class="flex-grow-1">
+
+                                <div class="d-flex
+                                            justify-content-between
+                                            align-items-start
+                                            gap-3">
+
+
+                                    <div>
+
+                                        <div class="announcement-title">
+
+                                            @announcement.Title
+
+                                        </div>
+
+                                        <div class="announcement-date">
+
+                                            <i class="bi bi-calendar3 me-1"></i>
+
+                                            @announcement.DatePosted
+                                                .ToString("MMM dd, yyyy")
+
+                                        </div>
+
+                                    </div>
+
+
+                                    <span class="badge bg-success">
+
+                                        Published
+
+                                    </span>
+
+                                </div>
+
+
+                                <p class="announcement-content">
+
+                                    @announcement.Content
+
+                                </p>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+            }
+        }
+        else
+        {
+            <div class="empty-state">
+
+                <i class="bi bi-megaphone d-block"></i>
+
+                <h6>
+                    No Announcements
+                </h6>
+
+                <p>
+                    There are currently no published
+                    announcements.
+                </p>
+
+            </div>
+        }
+
+    </div>
+
+</div>

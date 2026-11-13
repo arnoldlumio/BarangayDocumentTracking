@@ -1,0 +1,334 @@
+﻿@model BarangayDocumentTracking.Models.Document
+
+@{
+    ViewData["Title"] = "Add Document";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="mb-4">
+    <div>
+        <h4 class="mb-1">Add Document</h4>
+        <p class="text-muted mb-0">
+            Add a document or certificate that residents can request.
+        </p>
+    </div>
+</div>
+
+
+<!-- Success Message -->
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <i class="bi bi-check-circle me-2"></i>
+        @TempData["SuccessMessage"]
+
+        <button type="button"
+                class="btn-close"
+                data-bs-dismiss="alert">
+        </button>
+    </div>
+}
+
+
+<!-- Error Message -->
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <i class="bi bi-exclamation-triangle me-2"></i>
+        @TempData["ErrorMessage"]
+
+        <button type="button"
+                class="btn-close"
+                data-bs-dismiss="alert">
+        </button>
+    </div>
+}
+
+
+<div class="card shadow-sm border-0">
+
+    <div class="card-header bg-white py-3">
+
+        <h5 class="mb-0">
+            <i class="bi bi-file-earmark-plus me-2"></i>
+            Document Information
+        </h5>
+
+    </div>
+
+
+    <div class="card-body">
+
+        <form asp-controller="Documents"
+              asp-action="Create"
+              method="post"
+              id="createDocumentForm"
+              novalidate>
+
+            @Html.AntiForgeryToken()
+
+
+            <div class="row g-3">
+
+
+                <!-- Document Code -->
+                <div class="col-md-6">
+
+                    <label asp-for="DocumentCode"
+                           class="form-label">
+                        Document Code
+                    </label>
+
+                    <input asp-for="DocumentCode"
+                           class="form-control"
+                           placeholder="Example: BC-001"
+                           required />
+
+                    <div class="form-text">
+                        Unique code for this document.
+                    </div>
+
+                    <div class="invalid-feedback">
+                        Document code is required.
+                    </div>
+
+                    <span asp-validation-for="DocumentCode"
+                          class="text-danger">
+                    </span>
+
+                </div>
+
+
+                <!-- Status -->
+                <div class="col-md-6">
+
+                    <label asp-for="Status"
+                           class="form-label">
+                        Status
+                    </label>
+
+                    <select asp-for="Status"
+                            class="form-select"
+                            required>
+
+                        <option value="">
+                            Select status
+                        </option>
+
+                        <option value="Available">
+                            Available
+                        </option>
+
+                        <option value="Unavailable">
+                            Unavailable
+                        </option>
+
+                    </select>
+
+                    <div class="invalid-feedback">
+                        Please select a status.
+                    </div>
+
+                    <span asp-validation-for="Status"
+                          class="text-danger">
+                    </span>
+
+                </div>
+
+
+                <!-- Document Name -->
+                <div class="col-12">
+
+                    <label asp-for="DocumentName"
+                           class="form-label">
+                        Document Name
+                    </label>
+
+                    <input asp-for="DocumentName"
+                           class="form-control"
+                           placeholder="Example: Barangay Clearance"
+                           required />
+
+                    <div class="invalid-feedback">
+                        Document name is required.
+                    </div>
+
+                    <span asp-validation-for="DocumentName"
+                          class="text-danger">
+                    </span>
+
+                </div>
+
+
+                <!-- Description -->
+                <div class="col-12">
+
+                    <label asp-for="Description"
+                           class="form-label">
+                        Description
+                    </label>
+
+                    <textarea asp-for="Description"
+                              class="form-control"
+                              rows="4"
+                              placeholder="Enter a description of the document..."
+                              required></textarea>
+
+                    <div class="invalid-feedback">
+                        Description is required.
+                    </div>
+
+                    <span asp-validation-for="Description"
+                          class="text-danger">
+                    </span>
+
+                </div>
+
+
+                <!-- Requirements -->
+                <div class="col-12">
+
+                    <label asp-for="Requirements"
+                           class="form-label">
+                        Requirements
+                    </label>
+
+                    <textarea asp-for="Requirements"
+                              class="form-control"
+                              rows="4"
+                              placeholder="Example: Valid ID, Community Tax Certificate"></textarea>
+
+                    <div class="form-text">
+                        List the requirements that the resident needs to submit.
+                    </div>
+
+                    <span asp-validation-for="Requirements"
+                          class="text-danger">
+                    </span>
+
+                </div>
+
+
+                <!-- Processing Time -->
+                <div class="col-md-6">
+
+                    <label asp-for="ProcessingTime"
+                           class="form-label">
+                        Processing Time
+                    </label>
+
+                    <input asp-for="ProcessingTime"
+                           class="form-control"
+                           placeholder="Example: 1-2 Business Days" />
+
+                    <span asp-validation-for="ProcessingTime"
+                          class="text-danger">
+                    </span>
+
+                </div>
+
+
+                <!-- Fee -->
+                <div class="col-md-6">
+
+                    <label asp-for="Fee"
+                           class="form-label">
+                        Processing Fee
+                    </label>
+
+                    <div class="input-group">
+
+                        <span class="input-group-text">
+                            ₱
+                        </span>
+
+                        <input asp-for="Fee"
+                               type="number"
+                               step="0.01"
+                               min="0"
+                               class="form-control"
+                               placeholder="0.00"
+                               required />
+
+                    </div>
+
+                    <div class="form-text">
+                        Enter 0 if the document is free.
+                    </div>
+
+                    <div class="invalid-feedback">
+                        Please enter the processing fee.
+                    </div>
+
+                    <span asp-validation-for="Fee"
+                          class="text-danger">
+                    </span>
+
+                </div>
+
+
+            </div>
+
+
+            <hr class="my-4" />
+
+
+            <!-- Buttons -->
+            <div class="d-flex justify-content-between">
+
+                <a asp-controller="Documents"
+                   asp-action="Index"
+                   class="btn btn-secondary">
+
+                    <i class="bi bi-arrow-left me-1"></i>
+                    Cancel
+
+                </a>
+
+
+                <button type="submit"
+                        class="btn btn-primary">
+
+                    <i class="bi bi-save me-1"></i>
+                    Save Document
+
+                </button>
+
+            </div>
+
+
+        </form>
+
+    </div>
+
+</div>
+
+
+<!-- Client-side Validation -->
+<script>
+
+    document.addEventListener("DOMContentLoaded", function () {
+
+        const form =
+            document.getElementById("createDocumentForm");
+
+        if (form) {
+
+            form.addEventListener("submit", function (event) {
+
+                if (!form.checkValidity()) {
+
+                    event.preventDefault();
+                    event.stopPropagation();
+
+                }
+
+                form.classList.add("was-validated");
+
+            });
+
+        }
+
+    });
+
+</script>

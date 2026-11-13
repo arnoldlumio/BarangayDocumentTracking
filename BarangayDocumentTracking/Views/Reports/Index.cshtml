@@ -1,0 +1,1088 @@
+﻿@{
+    ViewData["Title"] = "Reports";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<!-- ==========================================
+     REPORTS PAGE
+     ========================================== -->
+
+<style>
+
+    /* ==========================================
+           PAGE HEADER
+           ========================================== */
+
+    .reports-header {
+        margin-bottom: 25px;
+    }
+
+        .reports-header h4 {
+            font-weight: 700;
+            color: #2c3e50;
+            margin-bottom: 5px;
+        }
+
+        .reports-header p {
+            color: #7f8c8d;
+            margin-bottom: 0;
+        }
+
+
+    /* ==========================================
+           REPORT CARD
+           ========================================== */
+
+    .report-card {
+        background: #ffffff;
+        border: 1px solid #e5e9ed;
+        border-radius: 8px;
+        height: 100%;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+        overflow: hidden;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+
+        .report-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 7px 18px rgba(0, 0, 0, 0.08);
+        }
+
+
+    /* ==========================================
+           REPORT CARD HEADER
+           ========================================== */
+
+    .report-card-header {
+        padding: 18px 20px;
+        border-bottom: 1px solid #e5e9ed;
+    }
+
+
+    .report-card-title {
+        font-size: 15px;
+        font-weight: 600;
+        color: #2c3e50;
+        margin: 0;
+    }
+
+
+    .report-card-description {
+        font-size: 12px;
+        color: #95a5a6;
+        margin-top: 4px;
+        margin-bottom: 0;
+    }
+
+
+    /* ==========================================
+           CHART AREA
+           ========================================== */
+
+    .chart-container {
+        position: relative;
+        height: 270px;
+        padding: 20px;
+    }
+
+
+        .chart-container canvas {
+            max-width: 100%;
+            max-height: 100%;
+        }
+
+
+    /* ==========================================
+           REPORT SUMMARY
+           ========================================== */
+
+    .report-summary {
+        padding: 15px 20px;
+        border-top: 1px solid #e5e9ed;
+        background: #fafbfc;
+    }
+
+
+    .summary-number {
+        font-size: 20px;
+        font-weight: 700;
+        color: #2c3e50;
+    }
+
+
+    .summary-label {
+        font-size: 11px;
+        color: #7f8c8d;
+    }
+
+
+
+    /* ==========================================
+           REPORT STATISTICS
+           ========================================== */
+
+    .statistics-card {
+        background: #ffffff;
+        border: 1px solid #e5e9ed;
+        border-radius: 8px;
+        padding: 20px;
+        height: 100%;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+    }
+
+
+    .statistics-icon {
+        width: 45px;
+        height: 45px;
+        border-radius: 7px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 20px;
+        margin-bottom: 12px;
+    }
+
+
+    .statistics-icon-blue {
+        background: #eaf4fb;
+        color: #3498db;
+    }
+
+
+    .statistics-icon-green {
+        background: #eaf7f0;
+        color: #18bc9c;
+    }
+
+
+    .statistics-icon-orange {
+        background: #fff4e6;
+        color: #f39c12;
+    }
+
+
+    .statistics-number {
+        font-size: 24px;
+        font-weight: 700;
+        color: #2c3e50;
+        margin: 0;
+    }
+
+
+    .statistics-label {
+        font-size: 12px;
+        color: #7f8c8d;
+        margin-top: 3px;
+    }
+
+
+
+    /* ==========================================
+           PRINT BUTTON
+           ========================================== */
+
+    .report-actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: 8px;
+        margin-bottom: 20px;
+    }
+
+
+
+    /* ==========================================
+           RESPONSIVE
+           ========================================== */
+
+    @@media (max-width: 768px) {
+
+        .chart-container {
+            height: 250px;
+        }
+
+        .report-actions {
+            justify-content: flex-start;
+        }
+    }
+
+</style>
+
+
+
+<!-- ==========================================
+     PAGE HEADER
+     ========================================== -->
+
+<div class="reports-header">
+
+    <h4>
+
+        Document Reports
+
+    </h4>
+
+    <p>
+
+        View document statistics and monitor the overall document activity
+        of the barangay.
+
+    </p>
+
+</div>
+
+
+
+<!-- ==========================================
+     ACTION BUTTONS
+     ========================================== -->
+
+<div class="report-actions">
+
+    <button type="button"
+            class="btn btn-sm btn-outline-primary"
+            onclick="window.print()">
+
+        <i class="bi bi-printer me-1"></i>
+
+        Print Report
+
+    </button>
+
+
+    <button type="button"
+            class="btn btn-sm btn-primary"
+            onclick="downloadReport()">
+
+        <i class="bi bi-download me-1"></i>
+
+        Export Report
+
+    </button>
+
+</div>
+
+
+
+<!-- ==========================================
+     SUMMARY STATISTICS
+     ========================================== -->
+
+<div class="row g-3 mb-4">
+
+
+    <!-- TOTAL DOCUMENTS -->
+
+    <div class="col-12 col-md-4">
+
+        <div class="statistics-card">
+
+            <div class="statistics-icon statistics-icon-blue">
+
+                <i class="bi bi-file-earmark-text"></i>
+
+            </div>
+
+
+            <h3 class="statistics-number">
+
+                128
+
+            </h3>
+
+
+            <div class="statistics-label">
+
+                Total Documents
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- COMPLETED -->
+
+    <div class="col-12 col-md-4">
+
+        <div class="statistics-card">
+
+            <div class="statistics-icon statistics-icon-green">
+
+                <i class="bi bi-check-circle"></i>
+
+            </div>
+
+
+            <h3 class="statistics-number">
+
+                62
+
+            </h3>
+
+
+            <div class="statistics-label">
+
+                Completed Documents
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- PROCESSING -->
+
+    <div class="col-12 col-md-4">
+
+        <div class="statistics-card">
+
+            <div class="statistics-icon statistics-icon-orange">
+
+                <i class="bi bi-clock-history"></i>
+
+            </div>
+
+
+            <h3 class="statistics-number">
+
+                47
+
+            </h3>
+
+
+            <div class="statistics-label">
+
+                Documents in Processing
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+<!-- ==========================================
+     THREE CIRCULAR CHARTS
+     ========================================== -->
+
+<div class="row g-3 mb-4">
+
+
+    <!-- ======================================
+         CHART 1
+         DOCUMENT STATUS
+         ====================================== -->
+
+    <div class="col-12 col-lg-4">
+
+        <div class="report-card">
+
+
+            <div class="report-card-header">
+
+                <h5 class="report-card-title">
+
+                    Document Status
+
+                </h5>
+
+
+                <p class="report-card-description">
+
+                    Current status of all documents
+
+                </p>
+
+            </div>
+
+
+            <div class="chart-container">
+
+                <canvas id="documentStatusChart"></canvas>
+
+            </div>
+
+
+            <div class="report-summary text-center">
+
+                <div class="summary-number">
+
+                    128
+
+                </div>
+
+                <div class="summary-label">
+
+                    Total Documents
+
+                </div>
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+
+
+    <!-- ======================================
+         CHART 2
+         DOCUMENT TYPE
+         ====================================== -->
+
+    <div class="col-12 col-lg-4">
+
+        <div class="report-card">
+
+
+            <div class="report-card-header">
+
+                <h5 class="report-card-title">
+
+                    Document Type
+
+                </h5>
+
+
+                <p class="report-card-description">
+
+                    Distribution of document types
+
+                </p>
+
+            </div>
+
+
+            <div class="chart-container">
+
+                <canvas id="documentTypeChart"></canvas>
+
+            </div>
+
+
+            <div class="report-summary text-center">
+
+                <div class="summary-number">
+
+                    128
+
+                </div>
+
+                <div class="summary-label">
+
+                    Documents Recorded
+
+                </div>
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+
+
+    <!-- ======================================
+         CHART 3
+         DOCUMENT MOVEMENT
+         ====================================== -->
+
+    <div class="col-12 col-lg-4">
+
+        <div class="report-card">
+
+
+            <div class="report-card-header">
+
+                <h5 class="report-card-title">
+
+                    Document Movement
+
+                </h5>
+
+
+                <p class="report-card-description">
+
+                    Incoming and outgoing documents
+
+                </p>
+
+            </div>
+
+
+            <div class="chart-container">
+
+                <canvas id="documentMovementChart"></canvas>
+
+            </div>
+
+
+            <div class="report-summary text-center">
+
+                <div class="summary-number">
+
+                    81
+
+                </div>
+
+                <div class="summary-label">
+
+                    Document Movements
+
+                </div>
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+<!-- ==========================================
+     DOCUMENT REPORT TABLE
+     ========================================== -->
+
+<div class="content-card">
+
+
+    <!-- HEADER -->
+
+    <div class="content-card-header">
+
+        <div>
+
+            <h5 class="content-card-title">
+
+                Document Summary
+
+            </h5>
+
+        </div>
+
+
+        <span class="badge bg-primary">
+
+            September 2026
+
+        </span>
+
+    </div>
+
+
+
+    <!-- BODY -->
+
+    <div class="content-card-body p-0">
+
+        <div class="table-responsive">
+
+            <table class="table table-hover align-middle">
+
+                <thead>
+
+                    <tr>
+
+                        <th class="ps-4">
+                            Category
+                        </th>
+
+                        <th>
+                            Number of Documents
+                        </th>
+
+                        <th>
+                            Percentage
+                        </th>
+
+                        <th>
+                            Status
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody>
+
+
+                    <!-- COMPLETED -->
+
+                    <tr>
+
+                        <td class="ps-4 fw-semibold">
+
+                            <i class="bi bi-check-circle text-success me-2"></i>
+
+                            Completed
+
+                        </td>
+
+
+                        <td>
+
+                            62
+
+                        </td>
+
+
+                        <td>
+
+                            48.4%
+
+                        </td>
+
+
+                        <td>
+
+                            <span class="badge bg-success">
+
+                                Completed
+
+                            </span>
+
+                        </td>
+
+                    </tr>
+
+
+
+                    <!-- PROCESSING -->
+
+                    <tr>
+
+                        <td class="ps-4 fw-semibold">
+
+                            <i class="bi bi-clock text-warning me-2"></i>
+
+                            Processing
+
+                        </td>
+
+
+                        <td>
+
+                            47
+
+                        </td>
+
+
+                        <td>
+
+                            36.7%
+
+                        </td>
+
+
+                        <td>
+
+                            <span class="badge bg-warning text-dark">
+
+                                Processing
+
+                            </span>
+
+                        </td>
+
+                    </tr>
+
+
+
+                    <!-- PENDING -->
+
+                    <tr>
+
+                        <td class="ps-4 fw-semibold">
+
+                            <i class="bi bi-hourglass-split text-secondary me-2"></i>
+
+                            Pending
+
+                        </td>
+
+
+                        <td>
+
+                            12
+
+                        </td>
+
+
+                        <td>
+
+                            9.4%
+
+                        </td>
+
+
+                        <td>
+
+                            <span class="badge bg-secondary">
+
+                                Pending
+
+                            </span>
+
+                        </td>
+
+                    </tr>
+
+
+
+                    <!-- RELEASED -->
+
+                    <tr>
+
+                        <td class="ps-4 fw-semibold">
+
+                            <i class="bi bi-box-arrow-up text-primary me-2"></i>
+
+                            Released
+
+                        </td>
+
+
+                        <td>
+
+                            7
+
+                        </td>
+
+
+                        <td>
+
+                            5.5%
+
+                        </td>
+
+
+                        <td>
+
+                            <span class="badge bg-primary">
+
+                                Released
+
+                            </span>
+
+                        </td>
+
+                    </tr>
+
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+<!-- ==========================================
+     CHART.JS
+     ========================================== -->
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+
+
+
+<script>
+
+    /* ==========================================
+       COMMON CHART SETTINGS
+       ========================================== */
+
+    const doughnutOptions = {
+
+        responsive: true,
+
+        maintainAspectRatio: false,
+
+        cutout: "68%",
+
+        plugins: {
+
+            legend: {
+
+                position: "bottom",
+
+                labels: {
+
+                    padding: 15,
+
+                    usePointStyle: true,
+
+                    pointStyle: "circle",
+
+                    font: {
+
+                        size: 11
+
+                    }
+
+                }
+
+            }
+
+        }
+
+    };
+
+
+
+    /* ==========================================
+       CHART 1
+       DOCUMENT STATUS
+       ========================================== */
+
+    const statusChart =
+        document.getElementById("documentStatusChart");
+
+
+    new Chart(statusChart, {
+
+        type: "doughnut",
+
+        data: {
+
+            labels: [
+
+                "Completed",
+
+                "Processing",
+
+                "Pending",
+
+                "Released"
+
+            ],
+
+            datasets: [{
+
+                data: [
+
+                    62,
+
+                    47,
+
+                    12,
+
+                    7
+
+                ],
+
+                backgroundColor: [
+
+                    "#18bc9c",
+
+                    "#f39c12",
+
+                    "#95a5a6",
+
+                    "#3498db"
+
+                ],
+
+                borderWidth: 0,
+
+                hoverOffset: 6
+
+            }]
+
+        },
+
+        options: doughnutOptions
+
+    });
+
+
+
+    /* ==========================================
+       CHART 2
+       DOCUMENT TYPE
+       ========================================== */
+
+    const typeChart =
+        document.getElementById("documentTypeChart");
+
+
+    new Chart(typeChart, {
+
+        type: "doughnut",
+
+        data: {
+
+            labels: [
+
+                "Certificates",
+
+                "Resolutions",
+
+                "Letters",
+
+                "Other"
+
+            ],
+
+            datasets: [{
+
+                data: [
+
+                    48,
+
+                    32,
+
+                    28,
+
+                    20
+
+                ],
+
+                backgroundColor: [
+
+                    "#3498db",
+
+                    "#1abc9c",
+
+                    "#f39c12",
+
+                    "#2c3e50"
+
+                ],
+
+                borderWidth: 0,
+
+                hoverOffset: 6
+
+            }]
+
+        },
+
+        options: doughnutOptions
+
+    });
+
+
+
+    /* ==========================================
+       CHART 3
+       DOCUMENT MOVEMENT
+       ========================================== */
+
+    const movementChart =
+        document.getElementById("documentMovementChart");
+
+
+    new Chart(movementChart, {
+
+        type: "doughnut",
+
+        data: {
+
+            labels: [
+
+                "Incoming",
+
+                "Outgoing"
+
+            ],
+
+            datasets: [{
+
+                data: [
+
+                    45,
+
+                    36
+
+                ],
+
+                backgroundColor: [
+
+                    "#1abc9c",
+
+                    "#3498db"
+
+                ],
+
+                borderWidth: 0,
+
+                hoverOffset: 6
+
+            }]
+
+        },
+
+        options: doughnutOptions
+
+    });
+
+
+
+    /* ==========================================
+       EXPORT REPORT
+       ========================================== */
+
+    function downloadReport() {
+
+        alert(
+            "Export functionality will be connected to the database later."
+        );
+
+    }
+
+</script>
+
+
+
+<!-- ==========================================
+     PRINT STYLES
+     ========================================== -->
+
+<style>
+
+    @@media print {
+
+        .sidebar,
+        .top-navbar,
+        .report-actions {
+            display: none !important;
+        }
+
+
+        .main-wrapper {
+            margin-left: 0 !important;
+        }
+
+
+        .content {
+            padding: 0 !important;
+        }
+
+
+        .report-card,
+        .statistics-card,
+        .content-card {
+            box-shadow: none !important;
+            break-inside: avoid;
+        }
+    }
+
+</style>
