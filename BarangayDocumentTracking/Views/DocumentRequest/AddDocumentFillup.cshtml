@@ -1,0 +1,206 @@
+﻿
+@model BarangayDocumentTracking.Models.Document
+
+@{
+    ViewData["Title"] = "Document Request Form";
+    Layout = "~/Views/Shared/_UserLayout.cshtml";
+}
+
+<div class="container py-5">
+
+    <div class="mb-4">
+        <a asp-controller="DocumentRequest"
+           asp-action="Index"
+           class="btn btn-outline-secondary">
+            <i class="bi bi-arrow-left"></i>
+            Back to Documents
+        </a>
+    </div>
+
+    <div class="card shadow-sm border-0 mx-auto" style="max-width: 800px;">
+
+        <div class="card-header bg-primary text-white p-4">
+            <h4 class="mb-1 fw-bold">
+                <i class="bi bi-file-earmark-text"></i>
+                Document Request Form
+            </h4>
+
+            <p class="mb-0">
+                Please fill out the form to request your selected document.
+            </p>
+        </div>
+
+        <div class="card-body p-4">
+
+            <!-- Selected Document -->
+            <div class="bg-light rounded p-3 mb-4">
+
+                <h6 class="text-primary fw-bold mb-3">
+                    <i class="bi bi-file-earmark-check"></i>
+                    Selected Document
+                </h6>
+
+                <input type="hidden"
+                       name="DocumentId"
+                       value="@Model.Id" />
+
+                <div class="row">
+
+                    <div class="col-md-6 mb-3">
+                        <small class="text-muted">Document Code</small>
+                        <div class="fw-bold">@Model.DocumentCode</div>
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <small class="text-muted">Document Name</small>
+                        <div class="fw-bold text-primary">
+                            @Model.DocumentName
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <small class="text-muted">Processing Time</small>
+                        <div>@Model.ProcessingTime</div>
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <small class="text-muted">Document Fee</small>
+
+                        @if (Model.Fee == 0)
+                        {
+                            <div class="fw-bold text-success">FREE</div>
+                        }
+                        else
+                        {
+                            <div class="fw-bold">
+                                ₱@Model.Fee.ToString("N2")
+                            </div>
+                        }
+                    </div>
+
+                    <div class="col-12">
+                        <small class="text-muted">Requirements</small>
+                        <div>@Model.Requirements</div>
+                    </div>
+
+                </div>
+            </div>
+
+            <hr />
+
+            <!-- Resident Information -->
+            <h5 class="fw-bold mb-3">
+                <i class="bi bi-person-lines-fill text-primary"></i>
+                Resident Information
+            </h5>
+
+            <form asp-controller="DocumentRequest"
+                  asp-action="Create"
+                  method="post">
+
+                @Html.AntiForgeryToken()
+
+                <input type="hidden"
+                       name="DocumentId"
+                       value="@Model.Id" />
+
+                <div asp-validation-summary="All"
+                     class="alert alert-danger"
+                     role="alert"></div>
+
+                <!-- Full Name -->
+                <div class="mb-3">
+                    <label class="form-label fw-semibold">
+                        Full Name <span class="text-danger">*</span>
+                    </label>
+
+                    <input type="text"
+                           name="ResidentName"
+                           class="form-control"
+                           placeholder="Enter your complete name"
+                           value="@ViewData.ModelState["ResidentName"]?.AttemptedValue"
+                           required />
+
+                </div>
+
+                <!-- Email -->
+                <div class="mb-3">
+                    <label class="form-label fw-semibold">
+                        Email Address <span class="text-danger">*</span>
+                    </label>
+
+                    <input type="email"
+                           name="Email"
+                           class="form-control"
+                           placeholder="example@email.com"
+                           value="@ViewData.ModelState["Email"]?.AttemptedValue"
+                           required />
+
+                </div>
+
+                <!-- Address -->
+                <div class="mb-3">
+                    <label class="form-label fw-semibold">
+                        Complete Address <span class="text-danger">*</span>
+                    </label>
+
+                    <textarea name="Address"
+                              class="form-control"
+                              rows="2"
+                              placeholder="House No., Street, Purok, Barangay"
+                              required>@ViewData.ModelState["Address"]?.AttemptedValue</textarea>
+
+                </div>
+
+                <!-- Contact Number -->
+                <div class="mb-3">
+                    <label class="form-label fw-semibold">
+                        Contact Number
+                    </label>
+
+                    <input type="tel"
+                           name="ContactNumber"
+                           class="form-control"
+                           placeholder="Enter your contact number"
+                           value="@ViewData.ModelState["ContactNumber"]?.AttemptedValue" />
+
+                </div>
+
+                <!-- Purpose -->
+                <div class="mb-4">
+                    <label class="form-label fw-semibold">
+                        Purpose of Request <span class="text-danger">*</span>
+                    </label>
+
+                    <textarea name="Purpose"
+                              class="form-control"
+                              rows="3"
+                              placeholder="Explain why you need this document"
+                              required>@ViewData.ModelState["Purpose"]?.AttemptedValue</textarea>
+
+                </div>
+
+                <!-- Buttons -->
+                <div class="d-flex justify-content-end gap-2">
+
+                    <a asp-controller="DocumentRequest"
+                       asp-action="Index"
+                       class="btn btn-outline-secondary">
+                        Cancel
+                    </a>
+
+                    <button type="submit"
+                            class="btn btn-success px-4">
+
+                        <i class="bi bi-send"></i>
+                        Submit Request
+
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+    </div>
+</div>

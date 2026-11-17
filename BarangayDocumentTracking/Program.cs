@@ -13,6 +13,8 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
             .GetConnectionString("DefaultConnection")));
 
 builder.Services.AddScoped<PdfService>();
+// Register Email Service
+builder.Services.AddScoped<EmailService>();
 
 
 // Add Session

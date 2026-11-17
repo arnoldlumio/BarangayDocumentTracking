@@ -1,15 +1,16 @@
-﻿@model List<BarangayDocumentTracking.Models.Document>
+﻿
+@model List<BarangayDocumentTracking.Models.Document>
 
 @{
     ViewData["Title"] = "Request Documents";
-   
+    
 }
 
 <div class="container py-5">
 
     <div class="text-center mb-5">
         <h2 class="fw-bold">
-            <i class="bi bi-file-earmark-text"></i>
+            <i class="bi bi-file-earmark-text text-primary"></i>
             Request Documents
         </h2>
 
@@ -26,9 +27,9 @@
             {
                 <div class="col-md-6 col-lg-4">
 
-                    <div class="card h-100 shadow-sm">
+                    <div class="card h-100 shadow-sm border-0">
 
-                        <div class="card-body">
+                        <div class="card-body p-4">
 
                             <div class="mb-3">
                                 <span class="badge bg-primary">
@@ -48,12 +49,16 @@
 
                             <p>
                                 <strong>Requirements:</strong><br />
-                                @document.Requirements
+                                @(string.IsNullOrWhiteSpace(document.Requirements)
+                                    ? "No requirements specified."
+                                    : document.Requirements)
                             </p>
 
                             <p>
                                 <strong>Processing Time:</strong><br />
-                                @document.ProcessingTime
+                                @(string.IsNullOrWhiteSpace(document.ProcessingTime)
+                                    ? "Not specified."
+                                    : document.ProcessingTime)
                             </p>
 
                             <p>
@@ -77,10 +82,14 @@
 
                         <div class="card-footer bg-white border-0 p-3">
 
-                            <a href="#"
+                            <a asp-controller="DocumentRequest"
+                               asp-action="AddDocumentFillup"
+                               asp-route-id="@document.Id"
                                class="btn btn-success w-100">
+
                                 <i class="bi bi-file-earmark-plus"></i>
                                 Request This Document
+
                             </a>
 
                         </div>
@@ -93,16 +102,10 @@
         else
         {
             <div class="col-12">
-
                 <div class="alert alert-info text-center">
-
                     <i class="bi bi-info-circle"></i>
-
-                    No documents are currently available
-                    for request.
-
+                    No documents are currently available for request.
                 </div>
-
             </div>
         }
 

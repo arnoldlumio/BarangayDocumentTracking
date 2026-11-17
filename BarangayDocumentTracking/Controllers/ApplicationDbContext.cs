@@ -16,5 +16,6 @@ namespace BarangayDocumentTracking.Data
         public DbSet<DocumentRequest> DocumentRequests { get; set; }
 
         public DbSet<Announcement> Announcements { get; set; }
+
     }
 }
