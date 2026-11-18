@@ -1,5 +1,4 @@
-﻿
-@model BarangayDocumentTracking.Models.Document
+﻿@model BarangayDocumentTracking.Models.Document
 
 @{
     ViewData["Title"] = "Document Request Form";
@@ -17,14 +16,14 @@
         </a>
     </div>
 
-    <div class="card shadow-sm border-0 mx-auto" style="max-width: 800px;">
+    <div class="card shadow-sm border-0 mx-auto"
+         style="max-width: 800px;">
 
         <div class="card-header bg-primary text-white p-4">
             <h4 class="mb-1 fw-bold">
                 <i class="bi bi-file-earmark-text"></i>
                 Document Request Form
             </h4>
-
             <p class="mb-0">
                 Please fill out the form to request your selected document.
             </p>
@@ -39,10 +38,6 @@
                     <i class="bi bi-file-earmark-check"></i>
                     Selected Document
                 </h6>
-
-                <input type="hidden"
-                       name="DocumentId"
-                       value="@Model.Id" />
 
                 <div class="row">
 
@@ -119,8 +114,11 @@
                            class="form-control"
                            placeholder="Enter your complete name"
                            value="@ViewData.ModelState["ResidentName"]?.AttemptedValue"
+                           maxlength="200"
                            required />
 
+                    @Html.ValidationMessage(
+                        "ResidentName", "", new { @class = "text-danger" })
                 </div>
 
                 <!-- Email -->
@@ -134,8 +132,16 @@
                            class="form-control"
                            placeholder="example@email.com"
                            value="@ViewData.ModelState["Email"]?.AttemptedValue"
+                           maxlength="200"
                            required />
 
+                    <small class="text-muted">
+                        Your confirmation email and request number
+                        will be sent to this email address.
+                    </small>
+
+                    @Html.ValidationMessage(
+                        "Email", "", new { @class = "text-danger" })
                 </div>
 
                 <!-- Address -->
@@ -147,9 +153,12 @@
                     <textarea name="Address"
                               class="form-control"
                               rows="2"
+                              maxlength="300"
                               placeholder="House No., Street, Purok, Barangay"
                               required>@ViewData.ModelState["Address"]?.AttemptedValue</textarea>
 
+                    @Html.ValidationMessage(
+                        "Address", "", new { @class = "text-danger" })
                 </div>
 
                 <!-- Contact Number -->
@@ -162,8 +171,11 @@
                            name="ContactNumber"
                            class="form-control"
                            placeholder="Enter your contact number"
-                           value="@ViewData.ModelState["ContactNumber"]?.AttemptedValue" />
+                           value="@ViewData.ModelState["ContactNumber"]?.AttemptedValue"
+                           maxlength="50" />
 
+                    @Html.ValidationMessage(
+                        "ContactNumber", "", new { @class = "text-danger" })
                 </div>
 
                 <!-- Purpose -->
@@ -175,9 +187,12 @@
                     <textarea name="Purpose"
                               class="form-control"
                               rows="3"
+                              maxlength="500"
                               placeholder="Explain why you need this document"
                               required>@ViewData.ModelState["Purpose"]?.AttemptedValue</textarea>
 
+                    @Html.ValidationMessage(
+                        "Purpose", "", new { @class = "text-danger" })
                 </div>
 
                 <!-- Buttons -->

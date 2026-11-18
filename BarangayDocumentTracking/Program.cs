@@ -12,13 +12,16 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
         builder.Configuration
             .GetConnectionString("DefaultConnection")));
 
+
+// Add Session
+builder.Services.AddSession();
+
 builder.Services.AddScoped<PdfService>();
 // Register Email Service
 builder.Services.AddScoped<EmailService>();
 
 
-// Add Session
-builder.Services.AddSession();
+
 
 
 
